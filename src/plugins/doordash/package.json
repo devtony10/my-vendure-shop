@@ -1,0 +1,16 @@
+{
+  "name": "doordash",
+  "version": "1.0.0",
+  "description": "Vendure plugin for syncing orders with doordash",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "devtony01",
+  "license": "MIT",
+  "dependencies": {
+    "@doordash/sdk": "^0.6.12",
+    "axios": "^1.7.7",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

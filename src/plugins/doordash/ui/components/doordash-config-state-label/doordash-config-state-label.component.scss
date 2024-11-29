@@ -1,0 +1,9 @@
+.state-icon {
+    margin-right: 3px;
+    &.new {
+        color: var(--color-warning-700);
+    }
+    &.saved {
+        color: var(--color-success-700);
+    }
+}

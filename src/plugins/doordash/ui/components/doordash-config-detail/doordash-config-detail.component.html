@@ -1,0 +1,131 @@
+<vdr-page-block>
+  <vdr-action-bar>
+    <vdr-ab-left>
+      <div class="config-info">
+        <doordash-config-status-label
+          [status]="
+            (doordashConfigState$ | async) === null
+              ? 'default'
+              : (doordashConfigStatus$ | async)
+          "
+        ></doordash-config-status-label>
+      </div>
+    </vdr-ab-left>
+
+    <vdr-ab-right>
+      <button
+        class="btn btn-primary mr-1"
+        (click)="test()"
+        [disabled]="
+          detailForm.invalid || (doordashConfigStatus$ | async) === 'checking'
+        "
+      >
+        Test
+      </button>
+
+      <ng-container
+        *ngIf="
+          (doordashConfigState$ | async) === null ||
+            (doordashConfigState$ | async) === 'new';
+          else updateButton
+        "
+      >
+        <button
+          class="btn btn-success mr-0"
+          (click)="create()"
+          [disabled]="
+            detailForm.invalid ||
+            (doordashConfigStatus$ | async) === null ||
+            (doordashConfigStatus$ | async) === 'checking' ||
+            (doordashConfigStatus$ | async) === 'failed' ||
+            (doordashConfigStatus$ | async) === 'default'
+          "
+        >
+          <clr-icon shape="check"></clr-icon>
+          Create
+        </button>
+      </ng-container>
+
+      <ng-template #updateButton>
+        <button
+          class="btn btn-success mr-0"
+          (click)="update()"
+          [disabled]="
+            detailForm.invalid ||
+            detailForm.pristine ||
+            (doordashConfigStatus$ | async) === 'checking' ||
+            (doordashConfigStatus$ | async) === 'failed' ||
+            (doordashConfigStatus$ | async) === ''
+          "
+        >
+          Update
+        </button>
+      </ng-template>
+    </vdr-ab-right>
+  </vdr-action-bar>
+</vdr-page-block>
+
+<form class="form" [formGroup]="detailForm">
+  <vdr-page-detail-layout>
+    <vdr-page-detail-sidebar>
+      <vdr-card>
+        <clr-toggle-wrapper>
+          <input
+            type="checkbox"
+            clrToggle
+            id="enabled"
+            name="enabled"
+            formControlName="enabled"
+          />
+          <label>enabled</label>
+        </clr-toggle-wrapper>
+      </vdr-card>
+      <vdr-card>
+        <clr-toggle-wrapper>
+          <input
+            type="checkbox"
+            clrToggle
+            id="sandbox"
+            name="sandbox"
+            formControlName="sandbox"
+          />
+          <label>sandbox</label>
+        </clr-toggle-wrapper>
+      </vdr-card>
+      <vdr-card *ngIf="entity$ | async as entity">
+        <vdr-page-entity-info [entity]="entity" />
+      </vdr-card>
+    </vdr-page-detail-sidebar>
+
+    <vdr-page-block>
+      <vdr-card>
+        <div class="form-grid">
+          <!-- <vdr-form-field [label]="'common.name' | translate" for="name">
+                        <input
+                            id="name"
+                            [readonly]="!('UpdateDoordashConfig' | hasPermission)"
+                            type="text"
+                            formControlName="name"
+                        />
+              </vdr-form-field> -->
+          <vdr-form-field label="API URL" for="apiUrl">
+            <input id="apiUrl" type="text" formControlName="apiUrl" />
+          </vdr-form-field>
+          <vdr-form-field label="Developer ID" for="developerId">
+            <input id="developerId" type="text" formControlName="developerId" />
+          </vdr-form-field>
+          <vdr-form-field label="Key ID" for="keyId">
+            <input id="keyId" type="text" formControlName="keyId" />
+          </vdr-form-field>
+          <vdr-form-field label="Signing Secret" for="signingSecret">
+            <input
+              id="signingSecret"
+              type="text"
+              formControlName="signingSecret"
+            />
+          </vdr-form-field>
+        </div>
+      </vdr-card>
+    </vdr-page-block>
+  </vdr-page-detail-layout>
+</form>

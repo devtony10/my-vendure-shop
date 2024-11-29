@@ -1,0 +1,107 @@
+<vdr-page-block>
+  <vdr-action-bar>
+    <vdr-ab-left></vdr-ab-left>
+    <vdr-ab-right>
+      <!-- <a
+        class="btn btn-primary"
+        *vdrIfPermissions="['CreateReview']"
+        [routerLink]="['./', 'create']"
+      > -->
+      <a
+        class="btn btn-primary"
+        [routerLink]="['/extensions/doordash-config/create']"
+      >
+        <clr-icon shape="plus"></clr-icon>
+        Create a doordash configuration
+      </a>
+    </vdr-ab-right>
+  </vdr-action-bar>
+</vdr-page-block>
+
+<vdr-data-table-2
+  id="config-list"
+  [items]="items$ | async"
+  [itemsPerPage]="itemsPerPage$ | async"
+  [totalItems]="totalItems$ | async"
+  [currentPage]="currentPage$ | async"
+  (pageChange)="setPageNumber($event)"
+  (itemsPerPageChange)="setItemsPerPage($event)"
+>
+  <vdr-bulk-action-menu
+    locationId="config-list"
+    [hostComponent]="this"
+    [selectionManager]="selectionManager"
+  />
+  <vdr-dt2-column [heading]="'common.id' | translate" [hiddenByDefault]="true">
+    <ng-template let-config="item">{{ config.id }}</ng-template>
+  </vdr-dt2-column>
+  <vdr-dt2-column
+    [heading]="'common.created-at' | translate"
+    [hiddenByDefault]="true"
+    [sort]="sorts.get('createdAt')"
+  >
+    <ng-template let-config="item">
+      {{ config.createdAt | localeDate : "short" }}
+    </ng-template>
+  </vdr-dt2-column>
+  <vdr-dt2-column
+    [heading]="'common.updated-at' | translate"
+    [hiddenByDefault]="true"
+    [sort]="sorts.get('updatedAt')"
+  >
+    <ng-template let-config="item">
+      {{ config.updatedAt | localeDate : "short" }}
+    </ng-template>
+  </vdr-dt2-column>
+  <vdr-dt2-column heading="Developer ID" [optional]="false">
+    <ng-template let-config="item">
+      <a class="button-ghost" [routerLink]="['./', config.id]"
+        ><span>{{ config.developerId }}</span>
+        <clr-icon shape="arrow right"></clr-icon>
+      </a>
+    </ng-template>
+  </vdr-dt2-column>
+  <vdr-dt2-column heading="Enabled" [optional]="false">
+    <ng-template let-config="item">
+      <clr-toggle-wrapper>
+        <input
+          type="checkbox"
+          checked="config.enabled"
+          clrToggle
+          disabled
+          id="enabled"
+          name="enabled"
+        />
+      </clr-toggle-wrapper>
+    </ng-template>
+  </vdr-dt2-column>
+  <vdr-dt2-column heading="Sandbox" [optional]="false">
+    <ng-template let-config="item">
+      <clr-toggle-wrapper>
+        <input
+          type="checkbox"
+          checked="config.sandbox"
+          clrToggle
+          disabled
+          id="sandbox"
+          name="sandbox"
+        />
+      </clr-toggle-wrapper>
+    </ng-template>
+  </vdr-dt2-column>
+
+  <vdr-dt2-column heading="Status" [sort]="sorts.get('status')">
+    <ng-template let-config="item">
+      <doordash-config-status-label
+        [status]="config.status"
+      ></doordash-config-status-label>
+    </ng-template>
+  </vdr-dt2-column>
+  <vdr-dt2-column heading="State" [sort]="sorts.get('state')">
+    <ng-template let-config="item">
+      <doordash-config-state-label
+        [state]="config.state"
+      ></doordash-config-state-label>
+    </ng-template>
+  </vdr-dt2-column>
+</vdr-data-table-2>
